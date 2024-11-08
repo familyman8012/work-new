@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+      .erd-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .mermaid {
+        white-space: pre;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="erd-container">
+      <pre class="mermaid">
+        erDiagram
+          User ||--o{ Task : "담당/보고"
+          Department ||--o{ User : "소속"
+          Department ||--o{ Department : "본부-팀"
+          Task ||--o{ TaskComment : "has"
+          Task ||--o{ TaskHistory : "has"
+          Task ||--o{ TaskTimeLog : "has"
+          Task ||--o{ TaskEvaluation : "has"
+          Task ||--o{ Notification : "has"
+          User ||--o{ TaskComment : "작성"
+          User ||--o{ TaskHistory : "변경"
+          User ||--o{ TaskTimeLog : "기록"
+          User ||--o{ TaskEvaluation : "평가"
+          User ||--o{ Notification : "수신"
+
+          User {
+            int id PK
+            string username
+            string email
+            int department_id FK
+            string role
+            string rank
+            string employee_id
+            boolean is_active
+          }
+
+          Task {
+            int id PK
+            string title
+            string description
+            string status
+            string priority
+            int assignee_id FK
+            int reporter_id FK
+            int department_id FK
+            datetime start_date
+            datetime due_date
+            datetime completed_at
+            float estimated_hours
+            float actual_hours
+            string difficulty
+          }
+
+          Department {
+            int id PK
+            string name
+            string code
+            int parent_id FK
+            datetime created_at
+            datetime updated_at
+          }
+
+          TaskEvaluation {
+            int id PK
+            int task_id FK
+            int evaluator_id FK
+            string difficulty
+            int performance_score
+            string feedback
+            datetime created_at
+          }
+
+          TaskComment {
+            int id PK
+            int task_id FK
+            int author_id FK
+            string content
+            datetime created_at
+            datetime updated_at
+          }
+
+          TaskHistory {
+            int id PK
+            int task_id FK
+            int changed_by_id FK
+            string previous_status
+            string new_status
+            string comment
+            datetime created_at
+          }
+
+          TaskTimeLog {
+            int id PK
+            int task_id FK
+            int logged_by_id FK
+            datetime start_time
+            datetime end_time
+            interval duration
+          }
+
+          Notification {
+            int id PK
+            int recipient_id FK
+            int task_id FK
+            string notification_type
+            string message
+            boolean is_read
+            string priority
+            datetime expires_at
+            datetime created_at
+          }
+      </pre>
+    </div>
+
+    <script>
+      mermaid.initialize({
+        theme: "default",
+        securityLevel: "loose",
+        er: {
+          diagramPadding: 20,
+          layoutDirection: "TB",
+          minEntityWidth: 100,
+          minEntityHeight: 75,
+          entityPadding: 15,
+          stroke: "gray",
+          fill: "honeydew",
+          fontSize: 12,
+        },
+      });
+    </script>
+  </body>
+</html>
